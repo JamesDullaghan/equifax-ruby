@@ -36,9 +36,6 @@ module Equifax
           :city,
           :state,
           :postal_code,
-          :residency_type,
-          :report_type,
-          :report_description,
           :lender_case_id
         ].each do |attr|
           define_method(attr) do
@@ -60,7 +57,7 @@ module Equifax
           end
         end
 
-        # Not Required
+        # Optional Fields
         [
           :middle_name,
           :employer_address,
@@ -109,7 +106,7 @@ module Equifax
                         _MiddleName="#{middle_name}" _LastName="#{last_name}" _PrintPositionType="Borrower"
                         _SSN="#{ssn}">
                         <_RESIDENCE _StreetAddress="#{street_address}" _City="#{city}"
-                                                _State="#{state}" _PostalCode="#{postal_code}" BorrowerResidencyType="#{residency_type}" />
+                                                _State="#{state}" _PostalCode="#{postal_code}" BorrowerResidencyType="Current" />
                         <EMPLOYER _Name="#{employer_name}" _StreetAddress="#{employer_address}"
                           _City="#{employer_city}" _State="#{employer_state}" _PostalCode="#{employer_postal_code}" />
                       </BORROWER>
@@ -119,6 +116,8 @@ module Equifax
               </REQUEST>
             </REQUEST_GROUP>
           eos
+
+          binding.pry
 
           @request_params ||= Nokogiri::XML(xml).to_xml
         end

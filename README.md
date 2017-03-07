@@ -51,29 +51,23 @@ response = Equifax::Worknumber::VOE::Instant.call(opts)
 
 
 ```ruby
-# middle_name and either employer_code or employer_name are optional
+# first_name, last_name, ssn, street_address, city, state, postal_code
+# either employer_code or employer_name are optional
+# middle_name, employer_address, employer_city, employer_state, employer_postal_code are optional
 
 opts = {
-          first_name: 'Example',
-          middle_name: 'Example',
-          last_name: 'Example',
-          ssn: '123456789',
-          street_address: '1234 Main St.',
-          city: 'Denver',
-          state: 'CO',
-          postal_code: '90206',
-          residency_type: 'Current',
-          report_type: 'Other',
-          report_description: 'VOE',
-          lender_case_id: 'LOANFILE123456',
-          employer_code: '',
-          employer_name: '',
-
+  first_name: 'Example',
+  last_name: 'Example',
+  ssn: '123456789',
+  street_address: '1234 Main St.',
+  city: 'Denver',
+  state: 'CO',
+  postal_code: '90206',
+  lender_case_id: 'LOANFILE123456',
+  employer_name: 'Chiptole'
 }
+
 response = Equifax::Worknumber::VOE::Instant.call(opts)
-=>
-
-
 ```
 
 ## Development
@@ -85,7 +79,6 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/equifax-ruby. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
-
 
 ## License
 
