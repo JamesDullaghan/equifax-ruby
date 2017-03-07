@@ -1,8 +1,6 @@
-# Equifax::Ruby
+# Equifax Ruby
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/equifax/ruby`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Equifax Ruby provides ruby bindings to the Equifax VOE/VOI services
 
 ## Installation
 
@@ -22,7 +20,61 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+#### Authentication
+
+**VIA Initializer**
+
+Set Equifax Credentials in your applications initializer
+
+```ruby
+Equifax::Client.account_number
+Equifax::Client.password
+```
+
+**VIA environment variable**
+
+Set Equifax Credentials via environment variables
+
+```bash
+export EQUIFAX_ACCOUNT_NUMBER="123456"
+export EQUIFAX_PASSWORD="123456"
+```
+
+**VIA request `opts` hash**
+
+```ruby
+opts = { account_number: "123456", password: "password" }
+response = Equifax::Worknumber::VOE::Instant.call(opts)
+```
+
+#### Instant VOE
+
+
+```ruby
+# middle_name and either employer_code or employer_name are optional
+
+opts = {
+          first_name: 'Example',
+          middle_name: 'Example',
+          last_name: 'Example',
+          ssn: '123456789',
+          street_address: '1234 Main St.',
+          city: 'Denver',
+          state: 'CO',
+          postal_code: '90206',
+          residency_type: 'Current',
+          report_type: 'Other',
+          report_description: 'VOE',
+          lender_case_id: 'LOANFILE123456',
+          employer_code: '',
+          employer_name: '',
+
+}
+response = Equifax::Worknumber::VOE::Instant.call(opts)
+=>
+
+
+```
 
 ## Development
 
