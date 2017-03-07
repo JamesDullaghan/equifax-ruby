@@ -1,6 +1,6 @@
 require 'net/http'
 require 'json'
-require 'nokogiri'
+require 'ox'
 require 'active_support/core_ext/hash'
 
 require 'equifax/client'

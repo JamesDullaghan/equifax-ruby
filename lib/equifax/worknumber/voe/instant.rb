@@ -11,7 +11,7 @@ module Equifax
         end
 
         def self.call(opts)
-          voe = Equifax::WorknumberVOE.new(opts)
+          voe = Equifax::Worknumber::VOE::Instant.new(opts)
 
           Equifax::Client.request(
             voe.send(:url),
@@ -117,9 +117,8 @@ module Equifax
             </REQUEST_GROUP>
           eos
 
-          binding.pry
-
-          @request_params ||= Nokogiri::XML(xml).to_xml
+          doc = Ox.parse(xml)
+          @request_params ||= Ox.dump(doc, indent: 2)
         end
       end
     end

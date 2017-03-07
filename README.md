@@ -27,8 +27,8 @@ Or install it yourself as:
 Set Equifax Credentials in your applications initializer
 
 ```ruby
-Equifax::Client.account_number
-Equifax::Client.password
+Equifax::Client.account_number = '123456'
+Equifax::Client.password = '123456'
 ```
 
 **VIA environment variable**
@@ -83,4 +83,3 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
