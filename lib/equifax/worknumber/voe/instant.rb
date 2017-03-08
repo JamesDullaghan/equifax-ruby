@@ -1,7 +1,7 @@
 module Equifax
   module Worknumber
     module VOE
-      class Instant
+      class Instant < ::Equifax::Worknumber::Base
         def initialize(opts)
           # Get a new client to fetch account # and password
           @client = Equifax::Client.new('')
@@ -22,75 +22,11 @@ module Equifax
 
         private
 
-        attr_reader :client,
-                    :opts,
-                    :account_number,
-                    :password
-
-        # Required Fields
-        [
-          :first_name,
-          :last_name,
-          :ssn,
-          :street_address,
-          :city,
-          :state,
-          :postal_code,
-          :lender_case_id
-        ].each do |attr|
-          define_method(attr) do
-            fetch_attribute(attr)
-          end
-        end
-
-        # Either is required, not both
-        [
-          :employer_code,
-          :employer_name
-        ].each do |attr|
-          define_method(attr) do
-            unless opts[:employer_code] || opts[:employer_name]
-              raise ArgumentError, 'Provide either <EMPLOYER Name /> or <EMSEmployerCode _Value />'
-            end
-
-            fetch_attribute(attr, '')
-          end
-        end
-
-        # Optional Fields
-        [
-          :middle_name,
-          :employer_address,
-          :employer_city,
-          :employer_state,
-          :employer_postal_code
-        ].each do |attr|
-          define_method(attr) do
-            fetch_attribute(attr, '')
-          end
-        end
-
-        def fetch_attribute(attr, default = nil)
-          camelized_attr = attr.to_s.split('_').collect(&:capitalize).join
-
-          fallback = if default
-            default
-          else
-            -> { raise ArgumentError, "Provide _#{camelized_attr}" }
-          end
-
-          opts.fetch(attr) { fallback.respond_to?(:call) ? fallback.call : fallback }
-        end
-
-        def url
-          @url ||= URI(opts.fetch(:url, 'https://emscert.equifax.com/talx/InteractionServlet'))
-        end
-
-        def request_params
-          xml = <<-eos
+        def xml
+          <<-eos
             <?xml version="1.0" encoding="utf-8"?>
             <REQUEST_GROUP MISMOVersionID="2.3.1">
-              <SUBMITTING_PARTY _Name="VENDORID">
+              <SUBMITTING_PARTY _Name="#{vendor_id}">
                 <PREFERRED_RESPONSE _Format="PDF"></PREFERRED_RESPONSE> </SUBMITTING_PARTY>
               <REQUEST InternalAccountIdentifier="#{account_number}"
                 LoginAccountIdentifier="#{account_number}" LoginAccountPassword="#{password}">
@@ -116,9 +52,6 @@ module Equifax
               </REQUEST>
             </REQUEST_GROUP>
           eos
-
-          doc = Ox.parse(xml)
-          @request_params ||= Ox.dump(doc, indent: 2)
         end
       end
     end

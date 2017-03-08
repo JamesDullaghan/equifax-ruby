@@ -51,11 +51,12 @@ response = Equifax::Worknumber::VOE::Instant.call(opts)
 
 
 ```ruby
-# first_name, last_name, ssn, street_address, city, state, postal_code
+# url, vendor_id, first_name, last_name, ssn, street_address, city, state, postal_code
 # either employer_code or employer_name are optional
 # middle_name, employer_address, employer_city, employer_state, employer_postal_code are optional
 
 opts = {
+  vendor_id: 'VENDORID',
   first_name: 'Example',
   last_name: 'Example',
   ssn: '123456789',
@@ -68,6 +69,12 @@ opts = {
 }
 
 response = Equifax::Worknumber::VOE::Instant.call(opts)
+```
+
+#### Instant VOI
+
+```ruby
+
 ```
 
 ## Development
