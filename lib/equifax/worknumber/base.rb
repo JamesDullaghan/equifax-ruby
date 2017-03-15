@@ -49,7 +49,7 @@ module Equifax
         :employer_address,
         :employer_city,
         :employer_state,
-        :employer_postal_code
+        :employer_postal_code,
         :street_address,
         :city,
         :state,
