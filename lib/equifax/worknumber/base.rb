@@ -22,10 +22,6 @@ module Equifax
         :first_name,
         :last_name,
         :ssn,
-        :street_address,
-        :city,
-        :state,
-        :postal_code,
         :lender_case_id
       ].each do |attr|
         define_method(attr) do
@@ -54,6 +50,10 @@ module Equifax
         :employer_city,
         :employer_state,
         :employer_postal_code
+        :street_address,
+        :city,
+        :state,
+        :postal_code,
       ].each do |attr|
         define_method(attr) do
           fetch_attribute(attr, '')
