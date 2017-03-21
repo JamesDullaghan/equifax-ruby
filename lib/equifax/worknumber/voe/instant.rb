@@ -2,14 +2,6 @@ module Equifax
   module Worknumber
     module VOE
       class Instant < ::Equifax::Worknumber::Base
-        def initialize(opts)
-          # Get a new client to fetch account # and password
-          @client = Equifax::Client.new('')
-          @account_number = @client.account_number
-          @password = @client.password
-          @opts = opts
-        end
-
         def self.call(opts)
           voe = Equifax::Worknumber::VOE::Instant.new(opts)
 
@@ -33,7 +25,7 @@ module Equifax
                 <KEY _Name="EMSEmployerCode" _Value="#{employer_code}" />
                 <REQUEST_DATA>
                   <VOI_REQUEST LenderCaseIdentifier="#{lender_case_id}"
-                    RequestingPartyRequestedByName="EMS, UFT TOOL">
+                    RequestingPartyRequestedByName="#{lender_name}">
                     <VOI_REQUEST_DATA VOIReportType="Other"
                       VOIReportTypeOtherDescription="VOE" VOIRequestType="Individual"
                       VOIReportRequestActionType="Submit" BorrowerID="Borrower" />

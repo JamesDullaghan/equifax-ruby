@@ -12,6 +12,13 @@ module Equifax
           )
         end
 
+        def self.required_fields
+          super + [
+            :order_number,
+            :organization_name,
+          ]
+        end
+
         def xml
           <<-eos
             <?xml version="1.0" encoding="utf-8"?>
@@ -20,11 +27,11 @@ module Equifax
                 <PREFERRED_RESPONSE _Format="PDF"></PREFERRED_RESPONSE> </SUBMITTING_PARTY>
               <REQUEST LoginAccountPassword="#{password}"
                 LoginAccountIdentifier="#{account_number}" InternalAccountIdentifier="#{account_number}"
-                RequestingPartyBranchIdentifier="Equifax Mortgage Sys">
+                RequestingPartyBranchIdentifier="#{organization_name}">
                 <KEY _Name="EMSEmployerCode" _Value="#{employer_code}" />
                 <REQUEST_DATA>
                   <VOI_REQUEST LenderCaseIdentifier="#{lender_case_id}"
-                    RequestingPartyRequestedByName="EMS Thru UFT Tool">
+                    RequestingPartyRequestedByName="#{lender_name}">
                     <VOI_REQUEST_DATA VOIReportType="Other"
                       VOIReportTypeOtherDescription="VOI" VOIRequestType="Individual"
                       VOIRequestID="VOITestWithEmployerCodeWithPDF" VOIReportRequestActionType="Submit"

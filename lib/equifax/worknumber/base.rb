@@ -17,56 +17,70 @@ module Equifax
                   :password
 
       # Required Fields
-      [
-        :vendor_id,
-        :first_name,
-        :last_name,
-        :ssn,
-        :lender_case_id
-      ].each do |attr|
+      def self.required_fields
+        [
+          :vendor_id,
+          :first_name,
+          :last_name,
+          :ssn,
+          :lender_case_id,
+          :lender_name,
+        ]
+      end
+
+      self.required_fields.each do |attr|
         define_method(attr) do
           fetch_attribute(attr)
         end
       end
 
-      # Either is required, not both
-      [
-        :employer_code,
-        :employer_name
-      ].each do |attr|
-        define_method(attr) do
-          unless opts[:employer_code] || opts[:employer_name]
-            raise ArgumentError, 'Provide either <EMPLOYER Name /> or <EMSEmployerCode _Value />'
-          end
+      # Either is required not both
+      def self.either_field_required
+        [ [:employer_code, :employer_name] ]
+      end
 
-          fetch_attribute(attr, '')
+      # TODO : This needs to account for pairs of fields, instead of a single arr.
+      self.either_field_required.each do |pair|
+        pair.each do |attr|
+          define_method(attr) do
+            # Check for either or
+            unless opts[pair[0]] || opts[pair[1]]
+              raise ArgumentError, "Provide either #{pair[0]} or #{pair[1]}"
+            end
+
+            fetch_attribute(attr, '')
+          end
         end
       end
 
       # Optional Fields
-      [
-        :middle_name,
-        :employer_address,
-        :employer_city,
-        :employer_state,
-        :employer_postal_code,
-        :street_address,
-        :city,
-        :state,
-        :postal_code,
-      ].each do |attr|
+      def self.optional_fields
+        [
+          :middle_name,
+          :employer_address,
+          :employer_city,
+          :employer_state,
+          :employer_postal_code,
+          :employer_phone,
+          :street_address,
+          :city,
+          :state,
+          :postal_code,
+          :borrower_id,
+        ]
+      end
+
+      self.optional_fields.each do |attr|
         define_method(attr) do
           fetch_attribute(attr, '')
         end
       end
 
       def fetch_attribute(attr, default = nil)
-        camelized_attr = attr.to_s.split('_').collect(&:capitalize).join
-
         fallback = if default
           default
         else
-          -> { raise ArgumentError, "Provide _#{camelized_attr}" }
+          -> { raise ArgumentError, "Provide #{attr}" }
         end
 
         opts.fetch(attr) { fallback.respond_to?(:call) ? fallback.call : fallback }
