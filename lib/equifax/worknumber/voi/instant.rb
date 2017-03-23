@@ -13,7 +13,7 @@ module Equifax
         end
 
         def self.required_fields
-          super + [
+          super::REQUIRED_FIELDS + [
             :order_number,
             :organization_name,
           ]
@@ -27,7 +27,7 @@ module Equifax
                 <PREFERRED_RESPONSE _Format="PDF"></PREFERRED_RESPONSE> </SUBMITTING_PARTY>
               <REQUEST LoginAccountPassword="#{password}"
                 LoginAccountIdentifier="#{account_number}" InternalAccountIdentifier="#{account_number}"
-                RequestingPartyBranchIdentifier="#{organization_name}">
+                RequestingPartyBranchIdentifier="#{lender_name}">
                 <KEY _Name="EMSEmployerCode" _Value="#{employer_code}" />
                 <REQUEST_DATA>
                   <VOI_REQUEST LenderCaseIdentifier="#{lender_case_id}"

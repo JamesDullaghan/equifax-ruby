@@ -14,7 +14,7 @@ module Equifax
           end
 
           def self.required_fields
-            super + [
+            super::REQUIRED_FIELDS + [
               :authform_name,
               :authform_content,
               :organization_name,
@@ -22,7 +22,7 @@ module Equifax
           end
 
           def self.optional_fields
-            super + [
+            super::OPTIONAL_FIELDS + [
               :employer_duns_number,
               :employer_division,
             ]

@@ -28,29 +28,9 @@ module Equifax
         ]
       end
 
-      self.required_fields.each do |attr|
-        define_method(attr) do
-          fetch_attribute(attr)
-        end
-      end
-
       # Either is required not both
       def self.either_field_required
         [ [:employer_code, :employer_name] ]
-      end
-
-      # TODO : This needs to account for pairs of fields, instead of a single arr.
-      self.either_field_required.each do |pair|
-        pair.each do |attr|
-          define_method(attr) do
-            # Check for either or
-            unless opts[pair[0]] || opts[pair[1]]
-              raise ArgumentError, "Provide either #{pair[0]} or #{pair[1]}"
-            end
-
-            fetch_attribute(attr, '')
-          end
-        end
       end
 
       # Optional Fields
@@ -70,9 +50,30 @@ module Equifax
         ]
       end
 
-      self.optional_fields.each do |attr|
-        define_method(attr) do
-          fetch_attribute(attr, '')
+      self.class_eval do
+        self.required_fields.each do |attr|
+          define_method(attr) do
+            fetch_attribute(attr)
+          end
+        end
+
+        self.either_field_required.each do |pair|
+          pair.each do |attr|
+            define_method(attr) do
+              # Check for either or
+              unless opts[pair[0]] || opts[pair[1]]
+                raise ArgumentError, "Provide either #{pair[0]} or #{pair[1]}"
+              end
+
+              fetch_attribute(attr, '')
+            end
+          end
+        end
+
+        self.optional_fields.each do |attr|
+          define_method(attr) do
+            fetch_attribute(attr, '')
+          end
         end
       end
 
